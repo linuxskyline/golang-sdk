@@ -5,7 +5,7 @@ import (
 	"net/url"
 
 	sky "github.com/linuxskyline/goskyline"
-)
+)goskyline
 
 type Client struct {
 	BaseURL   *url.URL
@@ -26,4 +26,8 @@ func NewClient(url *url.URL, token string) *Client {
 
 func (c *Client) ListHosts() ([]sky.Host, error) {
 	return []sky.Host{}, nil
+}
+
+func (c *Client) CreateUpdate() error {
+	return nil
 }
