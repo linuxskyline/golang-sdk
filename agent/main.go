@@ -1,9 +1,10 @@
 package agent
 
 import (
-	sky "goskyline"
 	"net/http"
 	"net/url"
+
+	sky "github.com/linuxskyline/goskyline"
 )
 
 type Client struct {
