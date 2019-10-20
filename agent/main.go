@@ -5,7 +5,7 @@ import (
 	"net/url"
 
 	sky "github.com/linuxskyline/goskyline"
-)goskyline
+)
 
 type Client struct {
 	BaseURL   *url.URL
