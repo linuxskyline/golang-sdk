@@ -1,4 +1,4 @@
-module goskyline
+module github.com/linuxskyline/goskyline
 
 go 1.12
 
