@@ -14,7 +14,7 @@ type Client struct {
 	httpClient *http.Client
 }
 
-func newClient(url *url.URL, token string) *Client {
+func NewClient(url *url.URL, token string) *Client {
 	return &Client{
 		BaseURL:    url,
 		UserAgent:  "golang/sdkclient",
