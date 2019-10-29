@@ -1,7 +1,7 @@
 package goskyline
 
 type Update struct {
-	ID             string `jsonapi:"primary,updates" json:"ID"`
+	ID             uint   `jsonapi:"primary,updates" json:"ID"`
 	PackageName    string `jsonapi:"attr,packageName" json:"packageName"`
 	CurrentVersion string `jsonapi:"attr,currentVersion" json:"currentVersion"`
 	NewVersion     string `jsonapi:"attr,newVersion" json:"newVersion"`
