@@ -7,8 +7,12 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/google/jsonapi"
 	sky "github.com/linuxskyline/goskyline"
 )
+
+type Response struct {
+}
 
 type Client struct {
 	BaseURL   *url.URL
@@ -37,7 +41,6 @@ func (c *Client) CreateUpdate(update sky.Update) error {
 		return err
 	}
 
-	client := &http.Client{}
 	r, _ := http.NewRequest(
 		"POST",
 		fmt.Sprintf("%s/%s", c.BaseURL.String(), "updates"),
@@ -46,7 +49,43 @@ func (c *Client) CreateUpdate(update sky.Update) error {
 	r.Header.Set("HostToken", c.Token)
 	r.Header.Set("Content-Type", "application/json")
 
-	_, err = client.Do(r)
+	_, err = c.httpClient.Do(r)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Client) GetUpdates() ([]*sky.Update, error) {
+	r, _ := http.NewRequest(
+		"GET",
+		fmt.Sprintf("%s/%s", c.BaseURL.String(), "updates"),
+		nil,
+	)
+	r.Header.Set("HostToken", c.Token)
+	r.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.httpClient.Do(r)
+	if err != nil {
+		return nil, err
+	}
+
+	responseUpdates := []*sky.Update{}
+	jsonapi.UnmarshalPayload(resp.Body, responseUpdates)
+	return responseUpdates, nil
+}
+
+func (c *Client) DeleteUpdate(update *sky.Update) error {
+	r, _ := http.NewRequest(
+		"DELETE",
+		fmt.Sprintf("%s/%s/%d", c.BaseURL.String(), "updates", update.ID),
+		nil,
+	)
+	r.Header.Set("HostToken", c.Token)
+	r.Header.Set("Content-Type", "application/json")
+
+	_, err := c.httpClient.Do(r)
 	if err != nil {
 		return err
 	}
