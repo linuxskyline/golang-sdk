@@ -72,7 +72,11 @@ func (c *Client) GetUpdates() ([]*sky.Update, error) {
 	}
 
 	responseUpdates := []*sky.Update{}
-	jsonapi.UnmarshalPayload(resp.Body, responseUpdates)
+	err = jsonapi.UnmarshalPayload(resp.Body, responseUpdates)
+	if err != nil {
+		return nil, err
+	}
+
 	return responseUpdates, nil
 }
 
