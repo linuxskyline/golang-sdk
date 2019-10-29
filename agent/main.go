@@ -3,9 +3,11 @@ package agent
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/google/jsonapi"
 	sky "github.com/linuxskyline/goskyline"
@@ -71,13 +73,22 @@ func (c *Client) GetUpdates() ([]*sky.Update, error) {
 		return nil, err
 	}
 
-	responseUpdates := []*sky.Update{}
-	err = jsonapi.UnmarshalPayload(resp.Body, responseUpdates)
+	responseUpdates, err := jsonapi.UnmarshalManyPayload(resp.Body, reflect.TypeOf(new(sky.Update)))
 	if err != nil {
 		return nil, err
 	}
 
-	return responseUpdates, nil
+	updates := []*sky.Update{}
+	for _, update := range responseUpdates {
+		u, ok := update.(*sky.Update)
+		if !ok {
+			return nil, errors.New("error converting response type to update")
+		}
+
+		updates = append(updates, u)
+	}
+
+	return updates, nil
 }
 
 func (c *Client) DeleteUpdate(update *sky.Update) error {
